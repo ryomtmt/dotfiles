@@ -1,49 +1,67 @@
-if 1
-  set nocompatible
-  filetype plugin indent off
+" Note: Skip initialization for vim-tiny or vim-small.
+if !1 | finish | endif
 
-  if has('vim_starting')
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
+if has('vim_starting')
+  if &compatible
+    set nocompatible               " Be iMproved
   endif
 
-  call neobundle#begin(expand('~/.vim/bundle/'))
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
 
-  " Let NeoBundle manage NeoBundle
-  NeoBundleFetch 'Shougo/neobundle.vim'
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
 
-  " add plugins
-  NeoBundle 'itchyny/lightline.vim'
-  NeoBundle 'tomasr/molokai'
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
 
-  filetype plugin indent on
+" My Bundles here:
+" Refer to |:NeoBundle-examples|.
+" Note: You don't set neobundle setting in .gvimrc!
 
-  NeoBundleCheck
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'tomasr/molokai'
 
-  call neobundle#end()
+call neobundle#end()
 
-  set t_Co=256
-  syntax enable
-  colorscheme molokai
-  let g:molokai_original = 1
-  let g:rehash256 = 1
+" Required:
+filetype plugin indent on
 
-  set number
-  set ignorecase
-  set nobackup
-  set smartcase
-  set wrapscan
-  set incsearch
-  set hlsearch
-  set noerrorbells
-  set novisualbell
-  set visualbell t_vb=
-  set showmatch matchtime=1
-  set laststatus=2
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
 
-  augroup auto_comment_off
-    autocmd!
-    autocmd BufEnter * setlocal formatoptions-=r
-    autocmd BufEnter * setlocal formatoptions-=o
-  augroup END
+set t_Co=256
+syntax enable
+colorscheme molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
 
-fi
+set number
+set ignorecase
+set nobackup
+set smartcase
+set wrapscan
+set incsearch
+set hlsearch
+set noerrorbells
+set novisualbell
+set visualbell t_vb=
+set showmatch matchtime=1
+set laststatus=2
+set expandtab
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+augroup auto_comment_off
+  autocmd!
+  autocmd BufEnter * setlocal formatoptions-=r
+  autocmd BufEnter * setlocal formatoptions-=o
+augroup END
+augroup auto_set_nopaste
+  autocmd!
+  autocmd InsertLeave * set nopaste
+augroup END
+
