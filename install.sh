@@ -21,11 +21,11 @@ done
 if [ -d ~/.vim/bundle ]
 then
   cd ~/.vim/bundle/neobundle.vim
-  git fetch
-  vim +":NeoBundleUpdate!" +:q
+  git pull
+  vim -u ~/.vimrc -i NONE -c "try | NeoBundleUpdate! | finally | q! | endtry" -e -s -V1
 else
   mkdir -p ~/.vim/bundle
   git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
-  vim +":NeoBundleInstall" +:q
+  vim -u ~/.vimrc -i NONE -c "try | NeoBundleUpdate! | finally | q! | endtry" -e -s
 fi
 
