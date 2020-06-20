@@ -19,23 +19,23 @@ sudo yum install -y epel-release
 sudo yum install -y jq
 
 if [[ $(which git 2>/dev/null) ]] ; then
-  if [[ -d "${DOTFILES_PATH}" ]] ; then
+  if [[ -d ${DOTFILES_PATH} ]] ; then
     cd ${DOTFILES_PATH}
     git pull
   else
-    git clone --recursive "${GITHUB_URL}" "${DOTFILES_PATH}"
+    git clone --recursive ${GITHUB_URL} ${DOTFILES_PATH}
   fi
 else
   sudo yum install -y git
-  if [[ -d "${DOTFILES_PATH}" ]] ; then
+  if [[ -d ${DOTFILES_PATH} ]] ; then
     cd ${DOTFILES_PATH}
     git pull
   else
-    git clone --recursive "${GITHUB_URL}" "${DOTFILES_PATH}"
+    git clone --recursive ${GITHUB_URL} ${DOTFILES_PATH}
   fi
 fi
 
-if [[ -d "dircolors" ]] ; then
+if [[ -d ${DIRCOLORS_PATH} ]] ; then
   curl -o dircolors/dircolors.solarized-ansi-dark --create-dirs \
     -sSL https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark
   curl -o dircolors/dircolors.molokai --create-dirs \
