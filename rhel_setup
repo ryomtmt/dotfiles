@@ -19,19 +19,19 @@ sudo yum install -y epel-release
 sudo yum install -y jq
 
 if [[ $(which git 2>/dev/null) ]] ; then
-  if [[ -d "${DOTPATH}" ]] ; then
-    cd ${DOTPATH}
+  if [[ -d "${DOTFILES_PATH}" ]] ; then
+    cd ${DOTFILES_PATH}
     git pull
   else
-    git clone --recursive "${GITHUB_URL}" "${DOTPATH}"
+    git clone --recursive "${GITHUB_URL}" "${DOTFILES_PATH}"
   fi
 else
   sudo yum install -y git
-  if [[ -d "${DOTPATH}" ]] ; then
-    cd ${DOTPATH}
+  if [[ -d "${DOTFILES_PATH}" ]] ; then
+    cd ${DOTFILES_PATH}
     git pull
   else
-    git clone --recursive "${GITHUB_URL}" "${DOTPATH}"
+    git clone --recursive "${GITHUB_URL}" "${DOTFILES_PATH}"
   fi
 fi
 
@@ -48,7 +48,7 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 vim +'PlugInstall --sync' +qa
 
-cd ${DOTPATH}
+cd ${DOTFILES_PATH}
 for dotfile in .?*
 do
   if [ $dotfile != '..' ] && [ $dotfile != '.git' ]
