@@ -8,8 +8,10 @@ cd ${HOME}
 
 installed_groups=$(LANG=C yum grouplist | sed '/^Installed Groups:/,$!d;/^Available Groups:/,$d;/^Installed Groups:/d;s/^[[:space:]]*//')
 if echo ${installed_groups}}|grep 'Development' > /dev/null; then
+  sudo yum config-manager --set-enabled PowerTools
   sudo yum update
 else
+  sudo yum config-manager --set-enabled PowerTools
   sudo yum update
   sudo yum groupinstall -y "Development Tools"
 fi
