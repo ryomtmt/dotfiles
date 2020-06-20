@@ -1,0 +1,71 @@
+#!/bin/bash
+
+DOTFILES_PATH="${HOME}/dotfiles"
+DIRCOLORS_PATH="${DOTFILES_PATH}/dircolors"
+GITHUB_URL="https://github.com/ryomtmt/dotfiles.git"
+
+cd ${HOME}
+
+installed_groups=$(LANG=C yum grouplist | sed '/^Installed Groups:/,$!d;/^Available Groups:/,$d;/^Installed Groups:/d;s/^[[:space:]]*//')
+if echo ${installed_groups}}|grep 'Development' > /dev/null; then
+  sudo yum update
+else
+  sudo yum update
+  sudo yum groupinstall -y "Development Tools"
+fi
+
+sudo yum install -y gcc zlib-devel bzip2 bzip2-devel readline readline-devel sqlite sqlite-devel openssl openssl-devel git libffi-devel
+sudo yum install -y epel-release
+sudo yum install -y jq
+
+if [[ $(which git 2>/dev/null) ]] ; then
+  if [[ -d "${DOTPATH}" ]] ; then
+    cd ${DOTPATH}
+    git pull
+  else
+    git clone --recursive "${GITHUB_URL}" "${DOTPATH}"
+  fi
+else
+  sudo yum install -y git
+  if [[ -d "${DOTPATH}" ]] ; then
+    cd ${DOTPATH}
+    git pull
+  else
+    git clone --recursive "${GITHUB_URL}" "${DOTPATH}"
+  fi
+fi
+
+if [[ -d "dircolors" ]] ; then
+  curl -o dircolors/dircolors.solarized-ansi-dark --create-dirs \
+    -sSL https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark
+  curl -o dircolors/dircolors.molokai --create-dirs \
+    -sSL https://raw.githubusercontent.com/gcollura/dotfiles/master/dircolors/dircolors.molokai
+fi
+
+mkdir -p ~/.vim/autoload ~/.vim/colors ~/.vim/plugged
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+vim +'PlugInstall --sync' +qa
+
+cd ${DOTPATH}
+for dotfile in .?*
+do
+  if [ $dotfile != '..' ] && [ $dotfile != '.git' ]
+  then
+    ln -fs "$PWD/$dotfile" $HOME
+  fi
+done
+
+if [[ -d ~/bin ]] ; then
+  :
+else
+  mkdir -p ~/bin
+fi
+
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+exec $SHELL --login
+
+
+
