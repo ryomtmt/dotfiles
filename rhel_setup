@@ -20,21 +20,11 @@ sudo yum install -y gcc zlib-devel bzip2 bzip2-devel readline readline-devel sql
 sudo yum install -y epel-release
 sudo yum install -y jq
 
-if [[ $(which git 2>/dev/null) ]] ; then
-  if [[ -d ${DOTFILES_PATH} ]] ; then
-    cd ${DOTFILES_PATH}
-    git pull
-  else
-    git clone --recursive ${GITHUB_URL} ${DOTFILES_PATH}
-  fi
+if [[ -d ${DOTFILES_PATH} ]] ; then
+  cd ${DOTFILES_PATH}
+  git pull
 else
-  sudo yum install -y git
-  if [[ -d ${DOTFILES_PATH} ]] ; then
-    cd ${DOTFILES_PATH}
-    git pull
-  else
-    git clone --recursive ${GITHUB_URL} ${DOTFILES_PATH}
-  fi
+  git clone --recursive ${GITHUB_URL} ${DOTFILES_PATH}
 fi
 
 cd ${DOTFILES_PATH}
