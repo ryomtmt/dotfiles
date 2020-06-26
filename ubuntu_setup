@@ -1,0 +1,55 @@
+#!/bin/bash
+
+DOTFILES_PATH="${HOME}/dotfiles"
+DIRCOLORS_PATH="${DOTFILES_PATH}/dircolors"
+GITHUB_URL="https://github.com/ryomtmt/dotfiles.git"
+
+cd ${HOME}
+
+
+  sudo apt update
+
+sudo apt install -y build-essential 
+sudo apt install -y gcc zlib1g-dev bzip2 libbz2-1.0 libbz2-dev readline-common libreadline-dev sqlite3 libsqlite3-dev openssl libssl-dev git libffi7 libffi-dev
+sudo apt install -y jq
+
+if [[ -d ${DOTFILES_PATH} ]] ; then
+  cd ${DOTFILES_PATH}
+  git pull
+else
+  git clone --recursive ${GITHUB_URL} ${DOTFILES_PATH}
+fi
+
+cd ${DOTFILES_PATH}
+for dotfile in .?*
+do
+  if [ $dotfile != '..' ] && [ $dotfile != '.git' ]
+  then
+    ln -fs "$PWD/$dotfile" $HOME
+  fi
+done
+
+if [[ -d ${DIRCOLORS_PATH} ]] ; then
+  curl -o dircolors/dircolors.solarized-ansi-dark --create-dirs \
+    -sSL https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark
+  curl -o dircolors/dircolors.molokai --create-dirs \
+    -sSL https://raw.githubusercontent.com/gcollura/dotfiles/master/dircolors/dircolors.molokai
+fi
+
+mkdir -p ~/.vim/autoload ~/.vim/colors ~/.vim/plugged
+curl -fsLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+curl -fsLo ~/.vim/colors/molokai.vim --create-dirs \
+  https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim
+
+vim +'PlugInstall --sync' +qa
+
+if [[ -d ~/bin ]] ; then
+  :
+else
+  mkdir -p ~/bin
+fi
+
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+exec $SHELL -l
